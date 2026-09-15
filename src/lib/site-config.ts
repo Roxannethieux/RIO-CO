@@ -44,11 +44,10 @@ export const siteConfig = {
 } as const;
 
 export const navLinks = [
-  { href: "/#specialites", label: "Spécialités" },
+  { href: "/specialites", label: "Spécialités" },
   { href: "/realisations", label: "Réalisations" },
-  { href: "/#a-propos", label: "À propos" },
-  { href: "/#avis", label: "Avis clients" },
-  { href: "/#contact", label: "Contact" },
+  { href: "/a-propos", label: "À propos" },
+  { href: "/contact", label: "Contact" },
 ] as const;
 
 export const specialties = [

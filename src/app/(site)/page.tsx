@@ -1,21 +1,15 @@
 import Hero from "@/components/Hero";
-import Specialties from "@/components/Specialties";
-import About from "@/components/About";
+import SpecialtiesTeaser from "@/components/SpecialtiesTeaser";
 import FeaturedRealisations from "@/components/FeaturedRealisations";
-import Testimonials from "@/components/Testimonials";
-import ServiceArea from "@/components/ServiceArea";
-import ContactForm from "@/components/ContactForm";
+import CtaBand from "@/components/CtaBand";
 
 export default function Home() {
   return (
     <>
       <Hero />
-      <Specialties />
-      <About />
+      <SpecialtiesTeaser />
       <FeaturedRealisations />
-      <Testimonials />
-      <ServiceArea />
-      <ContactForm />
+      <CtaBand />
     </>
   );
 }

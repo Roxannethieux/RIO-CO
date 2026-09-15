@@ -29,13 +29,13 @@ export default function Header() {
 
         <nav className="hidden items-center gap-9 lg:flex">
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.href}
               href={link.href}
               className="text-sm font-medium uppercase tracking-[0.12em] text-ivory/85 transition-colors hover:text-gold"
             >
               {link.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -47,7 +47,7 @@ export default function Header() {
             {siteConfig.phone}
           </a>
           <Link
-            href="/#contact"
+            href="/contact"
             className="inline-flex items-center rounded-sm border border-gold px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-gold transition-colors hover:bg-gold hover:text-navy-deep"
           >
             Demander un devis
@@ -75,14 +75,14 @@ export default function Header() {
         <div className="border-t border-gold/20 bg-navy px-6 pb-8 pt-2 lg:hidden">
           <nav className="flex flex-col gap-1">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
                 className="border-b border-white/5 py-3.5 text-base font-medium text-ivory/90"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </nav>
           <div className="mt-5 flex flex-col gap-3">
@@ -90,7 +90,7 @@ export default function Header() {
               {siteConfig.phone}
             </a>
             <Link
-              href="/#contact"
+              href="/contact"
               onClick={() => setOpen(false)}
               className="inline-flex items-center justify-center rounded-sm bg-gold px-5 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-navy-deep"
             >

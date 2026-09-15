@@ -62,7 +62,7 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="mt-10 flex flex-wrap items-center gap-5"
         >
-          <GoldButton href="/#contact">Demander un devis gratuit</GoldButton>
+          <GoldButton href="/contact">Demander un devis gratuit</GoldButton>
           <GoldButton href="/realisations" variant="outline">
             Voir les réalisations
           </GoldButton>

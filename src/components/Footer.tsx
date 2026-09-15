@@ -24,9 +24,9 @@ export default function Footer() {
             <ul className="mt-5 space-y-3 text-sm">
               {navLinks.map((link) => (
                 <li key={link.href}>
-                  <a href={link.href} className="text-ivory/70 hover:text-gold">
+                  <Link href={link.href} className="text-ivory/70 hover:text-gold">
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
