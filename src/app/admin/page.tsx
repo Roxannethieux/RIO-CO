@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { listRealisations, isCloudinaryConfigured } from "@/lib/cloudinary";
 import AdminUploadForm from "@/components/admin/AdminUploadForm";
 import AdminRealisationCard from "@/components/admin/AdminRealisationCard";
@@ -18,7 +19,15 @@ export default async function AdminDashboard() {
       </header>
 
       <div className="container-xl py-12">
-        <h1 className="font-serif text-3xl text-navy">Gestion des réalisations</h1>
+        <div className="flex items-center justify-between">
+          <h1 className="font-serif text-3xl text-navy">Gestion des réalisations</h1>
+          <Link
+            href="/admin/rendez-vous"
+            className="text-sm font-semibold uppercase tracking-wide text-gold-dark hover:text-gold"
+          >
+            Rendez-vous →
+          </Link>
+        </div>
         <p className="mt-2 max-w-2xl text-sm text-navy-mist">
           Ajoutez ici les photos de vos chantiers terminés. Chaque photo publiée apparaît
           immédiatement dans la galerie du site public.

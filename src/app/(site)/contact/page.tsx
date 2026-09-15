@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import ServiceArea from "@/components/ServiceArea";
 import ContactForm from "@/components/ContactForm";
+import BookingForm from "@/components/BookingForm";
+import { isBookingSystemConfigured } from "@/lib/bookingStatus";
 
 export const metadata: Metadata = {
   title: "Prenons rendez-vous",
@@ -12,7 +14,7 @@ export default function ContactPage() {
   return (
     <>
       <ServiceArea />
-      <ContactForm />
+      {isBookingSystemConfigured() ? <BookingForm /> : <ContactForm />}
     </>
   );
 }

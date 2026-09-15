@@ -1,6 +1,18 @@
 // Configuration centrale du site — à ajuster avec les informations réelles
 // de l'entreprise avant mise en ligne définitive chez le client.
 
+export const bookingConfig = {
+  // Adresse de départ / retour de la journée (atelier, domicile professionnel...).
+  // Indispensable pour calculer le premier et le dernier trajet de la journée.
+  baseAddress: "[ADRESSE DE DÉPART À COMPLÉTER — ex. atelier ou domicile professionnel]",
+  workingDays: [1, 2, 3, 4, 5] as number[], // 0 = dimanche … 6 = samedi
+  workingHours: { start: "08:00", end: "18:00" },
+  appointmentDurationMinutes: 60,
+  slotGranularityMinutes: 30,
+  minLeadHours: 24,
+  maxAdvanceDays: 45,
+} as const;
+
 export const siteConfig = {
   name: "RIO & CO.",
   legalName: "[RAISON SOCIALE À COMPLÉTER]",

@@ -36,46 +36,60 @@ Le site est accessible sur [http://localhost:3000](http://localhost:3000).
 | `RESEND_API_KEY` | Envoi des emails du formulaire de contact | Créer un compte gratuit sur [resend.com](https://resend.com) → API Keys |
 | `CONTACT_TO_EMAIL` | Adresse recevant les demandes de devis | Email de Maxime Rio |
 | `CONTACT_FROM_EMAIL` | Adresse expéditrice des emails | Voir note ci-dessous |
+| `POSTGRES_URL` | Base de données (prise de rendez-vous) | Onglet **Storage** du projet Vercel → **Create Database** → **Postgres** (injecté automatiquement) |
+| `GOOGLE_MAPS_API_KEY` | Calcul des temps de trajet entre rendez-vous | [console.cloud.google.com](https://console.cloud.google.com) → activer *Distance Matrix API* + *Geocoding API* → créer une clé |
 
 **Note Resend** : sans domaine vérifié, Resend impose l'expéditeur `onboarding@resend.dev` (valeur par défaut déjà configurée). Pour envoyer depuis `contact@rio-co.fr`, vérifier le domaine dans Resend (DNS) puis mettre à jour `CONTACT_FROM_EMAIL`.
 
-Tant que `CLOUDINARY_*` n'est pas configuré, la galerie affiche un état « à venir » élégant et le back-office affiche un message d'avertissement clair. Tant que `RESEND_API_KEY` n'est pas configuré, le formulaire de contact affiche un message invitant à contacter par téléphone en attendant.
+Tant que `CLOUDINARY_*` n'est pas configuré, la galerie affiche un état « à venir » élégant et le back-office affiche un message d'avertissement clair. Tant que `RESEND_API_KEY` n'est pas configuré, le formulaire de contact affiche un message invitant à contacter par téléphone en attendant. Tant que `POSTGRES_URL` / `GOOGLE_MAPS_API_KEY` / l'adresse de départ ne sont pas tous les trois configurés, la page Contact affiche automatiquement un simple formulaire de message à la place de la prise de rendez-vous en ligne.
 
 ## 4. Utiliser le back-office (ajout des photos de réalisations)
 
 1. Aller sur `/admin/login` et se connecter avec `ADMIN_PASSWORD`.
-2. Dans `/admin`, remplir le formulaire (photo, titre, catégorie, description optionnelle) et cliquer sur « Publier la photo ».
-3. La photo apparaît immédiatement dans la galerie publique (`/realisations` et sur la page d'accueil).
-4. Chaque photo peut être supprimée depuis le même écran.
+2. Dans `/admin`, remplir le formulaire : photo, **nom du projet/chantier**, **type de photo** (avant travaux / après travaux / photo simple), titre, catégorie, description optionnelle.
+3. Utiliser **le même nom de projet** pour toutes les photos d'un même chantier : elles sont automatiquement regroupées sur le site, et une paire avant/après affiche un comparatif côte à côte dès qu'elle est disponible.
+4. La photo apparaît immédiatement dans la galerie publique (`/realisations` et sur la page d'accueil).
+5. Chaque photo peut être supprimée depuis le même écran.
 
 Aucune compétence technique n'est requise après la configuration initiale des variables d'environnement.
 
-## 5. Contenu à finaliser avant l'envoi au client
+## 5. Prise de rendez-vous en ligne (avec temps de trajet)
+
+Une fois `POSTGRES_URL`, `GOOGLE_MAPS_API_KEY` et l'adresse de départ (`bookingConfig.baseAddress` dans `src/lib/site-config.ts`) configurés, la page Contact propose un vrai calendrier de réservation :
+
+- Le client indique l'adresse de son chantier et une date ; les créneaux affichés sont ceux réellement faisables compte tenu des trajets vers/depuis les autres rendez-vous déjà confirmés ce jour-là (calcul via Google Distance Matrix, adresse de départ = atelier/domicile professionnel).
+- Chaque réservation est **confirmée automatiquement** (un créneau proposé est par construction faisable) et envoie un email à Maxime et au client (si Resend est configuré).
+- `/admin/rendez-vous` liste les prochains rendez-vous et permet de les annuler.
+
+Réglages ajustables dans `src/lib/site-config.ts` (`bookingConfig`) : adresse de départ, jours/horaires travaillés, durée d'un rendez-vous (60 min par défaut), granularité des créneaux (30 min), délai minimum avant réservation (24h) et horizon de réservation (45 jours).
+
+Tant que ces trois éléments ne sont pas configurés, la page Contact affiche automatiquement le formulaire de message simple — le site reste pleinement fonctionnel sans la prise de rendez-vous en ligne.
+
+## 6. Contenu à finaliser avant l'envoi au client
 
 Les éléments suivants sont volontairement placés en placeholders clairement identifiables (`[...]`) dans `src/lib/site-config.ts` et sur les pages légales, à compléter avec les informations réelles de l'entreprise avant mise en ligne définitive :
 
-- Coordonnées : téléphone, adresse, zone d'intervention précise
+- Adresse, zone d'intervention précise
+- Adresse de départ pour la prise de rendez-vous (`bookingConfig.baseAddress`)
 - Mentions légales : forme juridique, SIRET, RCS, code APE
 - Assurance décennale : assureur, n° de police, zone de couverture
 - Médiateur de la consommation (obligatoire pour les professionnels du bâtiment)
-- Photo de profil de Maxime Rio (actuellement un bloc de remplacement dans la section « À propos »)
-- Avis clients (actuellement des exemples de démonstration)
 
-Le logo actuel (`src/components/Logo.tsx`) est une réinterprétation vectorielle originale du monogramme transmis, redessinée en SVG. Si un rendu pixel-exact du logo fourni est nécessaire, remplacer ce composant par le fichier logo définitif (SVG de préférence).
+Le logo utilisé (`public/logo/`) est dérivé du fichier fourni par le client (fond détouré, décliné en teinte navy pour les fonds clairs et ivoire pour les fonds sombres). Le fichier source original est conservé dans `brand/Logo-source.jpeg`.
 
-## 6. Structure du projet
+## 7. Structure du projet
 
 ```
 src/
   app/
-    (site)/            pages publiques (accueil, réalisations, mentions légales, confidentialité)
-    admin/              back-office protégé par mot de passe
-    api/                routes API (contact, authentification admin, gestion des réalisations)
-  components/           composants UI (Header, Footer, sections de la page d'accueil, admin/)
-  lib/                  configuration du site, intégrations Cloudinary / Resend, authentification
+    (site)/            pages publiques (accueil, spécialités, réalisations, contact, mentions légales, confidentialité)
+    admin/              back-office protégé par mot de passe (réalisations + rendez-vous)
+    api/                routes API (contact, réservation, authentification admin, gestion des réalisations/RDV)
+  components/           composants UI (Header, Footer, sections de page, admin/)
+  lib/                  configuration du site, intégrations Cloudinary / Resend / Google Maps / Postgres
 ```
 
-## 7. Commandes utiles
+## 8. Commandes utiles
 
 ```bash
 npm run dev     # serveur de développement
