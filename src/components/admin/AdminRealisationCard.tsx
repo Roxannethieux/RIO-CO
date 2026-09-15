@@ -32,9 +32,21 @@ export default function AdminRealisationCard({ item }: { item: Realisation }) {
         <Image src={item.url} alt={item.title} fill sizes="300px" className="object-cover" />
       </div>
       <div className="p-4">
-        <span className="text-[10px] font-semibold uppercase tracking-wide text-gold-dark">
-          {realisationCategories.find((c) => c.value === item.category)?.label}
-        </span>
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-[10px] font-semibold uppercase tracking-wide text-gold-dark">
+            {realisationCategories.find((c) => c.value === item.category)?.label}
+          </span>
+          {item.role !== "photo" && (
+            <span className="rounded-full border border-navy/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-navy-mist">
+              {item.role === "avant" ? "Avant" : "Après"}
+            </span>
+          )}
+        </div>
+        {item.project && (
+          <p className="mt-1.5 truncate text-xs font-semibold uppercase tracking-wide text-navy/60">
+            {item.project}
+          </p>
+        )}
         <p className="mt-1 truncate text-sm font-medium text-navy">{item.title}</p>
         <button
           type="button"

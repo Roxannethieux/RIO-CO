@@ -38,7 +38,7 @@ export default function AdminUploadForm() {
       onSubmit={handleSubmit}
       className="space-y-5 rounded-sm border border-navy/10 bg-white p-6"
     >
-      <h2 className="font-serif text-xl text-navy">Ajouter une réalisation</h2>
+      <h2 className="font-serif text-xl text-navy">Ajouter une photo</h2>
 
       <div>
         <label htmlFor="file" className="mb-1.5 block text-sm font-medium text-navy">
@@ -67,15 +67,50 @@ export default function AdminUploadForm() {
       </div>
 
       <div>
+        <label htmlFor="project" className="mb-1.5 block text-sm font-medium text-navy">
+          Projet / chantier *
+        </label>
+        <input
+          id="project"
+          name="project"
+          type="text"
+          required
+          placeholder="Ex. Rénovation salle de bain — Vincennes"
+          className="w-full rounded-sm border border-navy/15 bg-ivory px-4 py-2.5 text-sm"
+        />
+        <p className="mt-1 text-xs text-navy-mist">
+          Utilisez le même nom de projet pour toutes les photos d&apos;un même chantier — elles
+          seront regroupées ensemble sur le site.
+        </p>
+      </div>
+
+      <div>
+        <label htmlFor="role" className="mb-1.5 block text-sm font-medium text-navy">
+          Type de photo *
+        </label>
+        <select
+          id="role"
+          name="role"
+          required
+          defaultValue="photo"
+          className="w-full rounded-sm border border-navy/15 bg-ivory px-4 py-2.5 text-sm"
+        >
+          <option value="photo">Photo simple</option>
+          <option value="avant">Avant travaux</option>
+          <option value="apres">Après travaux</option>
+        </select>
+      </div>
+
+      <div>
         <label htmlFor="title" className="mb-1.5 block text-sm font-medium text-navy">
-          Titre *
+          Titre de la photo *
         </label>
         <input
           id="title"
           name="title"
           type="text"
           required
-          placeholder="Ex. Rénovation salle de bain — Vincennes"
+          placeholder="Ex. Vue de la douche"
           className="w-full rounded-sm border border-navy/15 bg-ivory px-4 py-2.5 text-sm"
         />
       </div>
@@ -100,7 +135,7 @@ export default function AdminUploadForm() {
 
       <div>
         <label htmlFor="description" className="mb-1.5 block text-sm font-medium text-navy">
-          Description (optionnel)
+          Description du projet (optionnel)
         </label>
         <textarea
           id="description"

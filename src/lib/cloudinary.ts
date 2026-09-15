@@ -24,6 +24,8 @@ export function isCloudinaryConfigured() {
   );
 }
 
+export type PhotoRole = "avant" | "apres" | "photo";
+
 export type Realisation = {
   publicId: string;
   url: string;
@@ -32,11 +34,17 @@ export type Realisation = {
   title: string;
   description: string;
   category: string;
+  project: string;
+  role: PhotoRole;
   createdAt: string;
 };
 
-function parseTags(tags: string[] | undefined) {
+function parseCategory(tags: string[] | undefined) {
   return (tags ?? []).find((t) => t !== "rio-co") ?? "autre";
+}
+
+function parseRole(value: string | undefined): PhotoRole {
+  return value === "avant" || value === "apres" ? value : "photo";
 }
 
 export async function listRealisations(): Promise<Realisation[]> {
@@ -58,7 +66,9 @@ export async function listRealisations(): Promise<Realisation[]> {
         secure_url: string;
         width: number;
         height: number;
-        context?: { custom?: { title?: string; caption?: string; alt?: string } };
+        context?: {
+          custom?: { title?: string; description?: string; project?: string; role?: string };
+        };
         tags?: string[];
         created_at: string;
       }) => ({
@@ -66,9 +76,11 @@ export async function listRealisations(): Promise<Realisation[]> {
         url: r.secure_url,
         width: r.width,
         height: r.height,
-        title: r.context?.custom?.caption ?? r.context?.custom?.alt ?? "Réalisation",
-        description: r.context?.custom?.title ?? "",
-        category: parseTags(r.tags),
+        title: r.context?.custom?.title ?? "Réalisation",
+        description: r.context?.custom?.description ?? "",
+        category: parseCategory(r.tags),
+        project: r.context?.custom?.project ?? "",
+        role: parseRole(r.context?.custom?.role),
         createdAt: r.created_at,
       })
     );
@@ -86,6 +98,8 @@ export async function uploadRealisation(params: {
   title: string;
   description: string;
   category: string;
+  project: string;
+  role: PhotoRole;
 }) {
   configure();
   if (!isCloudinaryConfigured()) {
@@ -95,7 +109,12 @@ export async function uploadRealisation(params: {
   const result = await cloudinary.uploader.upload(params.fileDataUrl, {
     folder: FOLDER,
     tags: ["rio-co", params.category],
-    context: { caption: params.title, title: params.description },
+    context: {
+      title: params.title,
+      description: params.description,
+      project: params.project,
+      role: params.role,
+    },
   });
 
   return result;

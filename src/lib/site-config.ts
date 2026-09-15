@@ -8,8 +8,8 @@ export const siteConfig = {
   founder: "Maxime Rio",
   founderRole: "Fondateur & artisan",
   baseUrl: "https://rio-co.vercel.app",
-  phone: "[Téléphone]",
-  phoneHref: "tel:+33000000000",
+  phone: "06 20 43 79 16",
+  phoneHref: "tel:+33620437916",
   email: "contact@rio-co.fr",
   address: {
     street: "[ADRESSE À COMPLÉTER]",
@@ -55,9 +55,9 @@ export const specialties = [
     title: "Plomberie",
     highlight: true,
     description:
-      "Installation, dépannage et rénovation de plomberie — de la fuite d'urgence à la refonte complète de vos réseaux d'eau, notre spécialité historique.",
+      "Installation et rénovation complète de vos réseaux d'eau et sanitaires, de la conception à la finition — ma spécialité historique.",
     items: [
-      "Recherche de fuite & dépannage",
+      "Rénovation de réseaux d'eau",
       "Installation sanitaire complète",
       "Rénovation salle de bain",
       "Chauffe-eau & production d'eau chaude",

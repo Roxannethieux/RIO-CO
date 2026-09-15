@@ -12,16 +12,16 @@ export default function ServiceArea() {
             Où intervient RIO &amp; CO. ?
           </h2>
           <p className="mt-6 text-base leading-relaxed text-navy-mist sm:text-lg">
-            {siteConfig.founder} intervient chez les particuliers et professionnels de{" "}
+            J&apos;interviens chez les particuliers et professionnels de{" "}
             {siteConfig.address.zone}. Une distance plus importante peut être étudiée selon la
             nature du projet.
           </p>
           <div className="mt-10 flex items-center gap-4 rounded-sm border border-navy/10 bg-ivory p-6">
             <div className="h-12 w-12 shrink-0 rounded-full border border-gold/40" />
             <div>
-              <div className="font-semibold text-navy">Urgence plomberie</div>
+              <div className="font-semibold text-navy">Un projet à discuter ?</div>
               <div className="text-sm text-navy-mist">
-                Intervention rapide —{" "}
+                Appelez-moi directement —{" "}
                 <a href={siteConfig.phoneHref} className="font-semibold text-gold-dark">
                   {siteConfig.phone}
                 </a>

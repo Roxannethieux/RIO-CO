@@ -44,8 +44,8 @@ export default function ContactForm() {
             Un projet à chiffrer ? Parlons-en.
           </h2>
           <p className="mt-6 text-base leading-relaxed text-navy-mist">
-            Décrivez votre projet en quelques mots, {siteConfig.founder} vous recontacte sous 24 à
-            48h ouvrées avec un premier avis et, si besoin, une date de visite.
+            Décrivez votre projet en quelques mots, je vous recontacte sous 24 à 48h ouvrées avec
+            un premier avis et, si besoin, une date de visite.
           </p>
 
           <dl className="mt-10 space-y-5 text-sm">

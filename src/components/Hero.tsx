@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { siteConfig } from "@/lib/site-config";
 import { GoldButton } from "./ui";
 
 export default function Hero() {
@@ -51,9 +50,9 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="mt-7 max-w-xl text-base leading-relaxed text-ivory/75 sm:text-lg"
         >
-          {siteConfig.founder} accompagne particuliers et professionnels dans leurs projets de
-          rénovation — de la fuite d&apos;eau au chantier complet — avec un engagement simple :
-          un seul interlocuteur, un travail soigné, une parole tenue.
+          J&apos;accompagne particuliers et professionnels dans leurs projets de rénovation — de
+          la fuite d&apos;eau au chantier complet — avec un engagement simple : un seul
+          interlocuteur, un travail soigné, une parole tenue.
         </motion.p>
 
         <motion.div
@@ -75,7 +74,7 @@ export default function Hero() {
           className="mt-20 grid max-w-2xl grid-cols-3 gap-6 border-t border-gold/20 pt-8"
         >
           {[
-            ["Intervention", "sous 48h en urgence"],
+            ["Interlocuteur", "unique, du début à la fin"],
             ["Devis", "gratuit & détaillé"],
             ["Garantie", "décennale"],
           ].map(([label, value]) => (
