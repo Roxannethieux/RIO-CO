@@ -16,7 +16,8 @@ export default function Specialties() {
           {specialties.map((spec, i) => (
             <Reveal key={spec.slug} delay={i * 0.08}>
               <div
-                className={`group h-full rounded-sm border p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
+                id={spec.slug}
+                className={`group h-full scroll-mt-28 rounded-sm border p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
                   spec.highlight
                     ? "border-gold bg-navy text-ivory shadow-lg"
                     : "border-navy/10 bg-white text-ink hover:border-gold/50"

@@ -72,10 +72,9 @@ export default function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.5 }}
-          className="mt-20 grid max-w-2xl grid-cols-2 gap-6 border-t border-gold/20 pt-8 sm:grid-cols-4"
+          className="mt-20 grid max-w-2xl grid-cols-3 gap-6 border-t border-gold/20 pt-8"
         >
           {[
-            ["10+", "ans de métier"],
             ["Intervention", "sous 48h en urgence"],
             ["Devis", "gratuit & détaillé"],
             ["Garantie", "décennale"],
