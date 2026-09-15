@@ -2,7 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import Logo from "@/components/Logo";
+import Image from "next/image";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -36,7 +36,7 @@ export default function AdminLoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-navy px-6 py-20">
       <div className="w-full max-w-sm">
         <div className="flex justify-center">
-          <Logo variant="light" />
+          <Image src="/logo/lockup-ivory.png" alt="RIO & CO." width={140} height={139} priority />
         </div>
         <h1 className="mt-8 text-center font-serif text-2xl text-ivory">Espace privé</h1>
         <p className="mt-2 text-center text-sm text-ivory/60">
