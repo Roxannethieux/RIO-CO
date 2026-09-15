@@ -41,7 +41,7 @@ export default function ContactForm() {
         <Reveal>
           <Eyebrow>Contact</Eyebrow>
           <h2 className="mt-4 font-serif text-3xl font-semibold text-navy sm:text-4xl">
-            Un projet à chiffrer ? Parlons-en.
+            Prenons rendez-vous
           </h2>
           <p className="mt-6 text-base leading-relaxed text-navy-mist">
             Décrivez votre projet en quelques mots, je vous recontacte sous 24 à 48h ouvrées avec

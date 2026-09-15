@@ -3,7 +3,7 @@ import Specialties from "@/components/Specialties";
 import CtaBand from "@/components/CtaBand";
 
 export const metadata: Metadata = {
-  title: "Nos spécialités",
+  title: "Mes spécialités",
   description:
     "Plomberie, rénovation complète, second œuvre, sols et carrelage — les savoir-faire de RIO & CO., artisan tout corps d'état.",
 };

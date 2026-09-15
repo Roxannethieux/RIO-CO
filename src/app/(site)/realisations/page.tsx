@@ -5,7 +5,7 @@ import { Container, SectionHeading } from "@/components/ui";
 import RealisationsGrid from "@/components/RealisationsGrid";
 
 export const metadata: Metadata = {
-  title: "Réalisations",
+  title: "Découvrez mon travail",
   description:
     "Découvrez mes chantiers, projet par projet, avec photos avant/après : plomberie, salles de bain, cuisines et rénovations complètes.",
 };
@@ -21,7 +21,7 @@ export default async function RealisationsPage() {
         <Container>
           <SectionHeading
             eyebrow="Portfolio complet"
-            title="Mes réalisations"
+            title="Découvrez mon travail"
             description="Chaque chantier reflète mon exigence : plomberie, rénovation de salles de bain, cuisines et projets complets — présentés projet par projet, avant/après quand la comparaison est disponible."
             tone="light"
           />

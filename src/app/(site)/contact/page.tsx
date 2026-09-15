@@ -3,9 +3,9 @@ import ServiceArea from "@/components/ServiceArea";
 import ContactForm from "@/components/ContactForm";
 
 export const metadata: Metadata = {
-  title: "Contact",
+  title: "Prenons rendez-vous",
   description:
-    "Demandez un devis gratuit à RIO & CO. — rénovation tout corps d'état et plomberie. Réponse sous 24 à 48h.",
+    "Prenons rendez-vous pour votre projet de rénovation — RIO & CO., tout corps d'état et plomberie. Réponse sous 24 à 48h.",
 };
 
 export default function ContactPage() {
