@@ -43,34 +43,42 @@ export async function listRealisations(): Promise<Realisation[]> {
   configure();
   if (!isCloudinaryConfigured()) return [];
 
-  const result = await cloudinary.search
-    .expression(`folder:${FOLDER}`)
-    .with_field("context")
-    .with_field("tags")
-    .sort_by("created_at", "desc")
-    .max_results(200)
-    .execute();
+  try {
+    const result = await cloudinary.search
+      .expression(`folder:${FOLDER}`)
+      .with_field("context")
+      .with_field("tags")
+      .sort_by("created_at", "desc")
+      .max_results(200)
+      .execute();
 
-  return (result.resources ?? []).map(
-    (r: {
-      public_id: string;
-      secure_url: string;
-      width: number;
-      height: number;
-      context?: { custom?: { title?: string; caption?: string; alt?: string } };
-      tags?: string[];
-      created_at: string;
-    }) => ({
-      publicId: r.public_id,
-      url: r.secure_url,
-      width: r.width,
-      height: r.height,
-      title: r.context?.custom?.caption ?? r.context?.custom?.alt ?? "Réalisation",
-      description: r.context?.custom?.title ?? "",
-      category: parseTags(r.tags),
-      createdAt: r.created_at,
-    })
-  );
+    return (result.resources ?? []).map(
+      (r: {
+        public_id: string;
+        secure_url: string;
+        width: number;
+        height: number;
+        context?: { custom?: { title?: string; caption?: string; alt?: string } };
+        tags?: string[];
+        created_at: string;
+      }) => ({
+        publicId: r.public_id,
+        url: r.secure_url,
+        width: r.width,
+        height: r.height,
+        title: r.context?.custom?.caption ?? r.context?.custom?.alt ?? "Réalisation",
+        description: r.context?.custom?.title ?? "",
+        category: parseTags(r.tags),
+        createdAt: r.created_at,
+      })
+    );
+  } catch (error) {
+    // Une réalisation ne doit jamais faire échouer le rendu ou la construction du site :
+    // en cas de souci Cloudinary (identifiants, réseau, quota…), on affiche simplement
+    // une galerie vide plutôt que de faire planter la page.
+    console.error("[cloudinary] Échec de récupération des réalisations", error);
+    return [];
+  }
 }
 
 export async function uploadRealisation(params: {
