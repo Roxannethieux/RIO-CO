@@ -1,0 +1,62 @@
+import { listRealisations, isCloudinaryConfigured } from "@/lib/cloudinary";
+import AdminUploadForm from "@/components/admin/AdminUploadForm";
+import AdminRealisationCard from "@/components/admin/AdminRealisationCard";
+import LogoutButton from "@/components/admin/LogoutButton";
+import Logo from "@/components/Logo";
+
+export const dynamic = "force-dynamic";
+
+export default async function AdminDashboard() {
+  const configured = isCloudinaryConfigured();
+  const items = configured ? await listRealisations() : [];
+
+  return (
+    <div className="min-h-screen bg-ivory-dim">
+      <header className="flex items-center justify-between border-b border-navy/10 bg-navy px-6 py-5 sm:px-10">
+        <Logo variant="light" />
+        <LogoutButton />
+      </header>
+
+      <div className="container-xl py-12">
+        <h1 className="font-serif text-3xl text-navy">Gestion des réalisations</h1>
+        <p className="mt-2 max-w-2xl text-sm text-navy-mist">
+          Ajoutez ici les photos de vos chantiers terminés. Chaque photo publiée apparaît
+          immédiatement dans la galerie du site public.
+        </p>
+
+        {!configured && (
+          <div className="mt-8 rounded-sm border border-amber-300 bg-amber-50 px-6 py-5 text-sm text-amber-900">
+            <strong>Stockage des photos non configuré.</strong> Ajoutez les variables
+            d&apos;environnement <code>CLOUDINARY_CLOUD_NAME</code>, <code>CLOUDINARY_API_KEY</code>{" "}
+            et <code>CLOUDINARY_API_SECRET</code> (voir le fichier <code>README.md</code>) pour
+            activer l&apos;ajout de photos.
+          </div>
+        )}
+
+        <div className="mt-10 grid gap-10 lg:grid-cols-[380px_1fr]">
+          <AdminUploadForm />
+
+          <div>
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="font-sans text-lg font-semibold text-navy">
+                {items.length} réalisation{items.length > 1 ? "s" : ""} publiée
+                {items.length > 1 ? "s" : ""}
+              </h2>
+            </div>
+            {items.length === 0 ? (
+              <p className="rounded-sm border border-dashed border-navy/20 bg-white px-6 py-10 text-center text-sm text-navy-mist">
+                Aucune réalisation publiée pour le moment.
+              </p>
+            ) : (
+              <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+                {items.map((item) => (
+                  <AdminRealisationCard key={item.publicId} item={item} />
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
