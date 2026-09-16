@@ -6,9 +6,11 @@ import type { ProjectGroup } from "@/lib/realisations";
 import { realisationCategories } from "@/lib/site-config";
 import Reveal from "./Reveal";
 import BeforeAfter from "./BeforeAfter";
+import Lightbox from "./Lightbox";
 
 export default function RealisationsGrid({ groups }: { groups: ProjectGroup[] }) {
   const [filter, setFilter] = useState<string>("all");
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   const filtered = useMemo(
     () => (filter === "all" ? groups : groups.filter((g) => g.category === filter)),
@@ -50,20 +52,32 @@ export default function RealisationsGrid({ groups }: { groups: ProjectGroup[] })
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {filtered.map((group, i) => (
           <Reveal key={group.key} delay={(i % 6) * 0.06}>
-            <article className="overflow-hidden rounded-sm border border-navy/10 bg-white">
-              {group.pairs.length > 0 ? (
-                <BeforeAfter before={group.pairs[0].before} after={group.pairs[0].after} />
-              ) : group.photos[0] ? (
-                <div className="relative aspect-[4/3] w-full">
-                  <Image
-                    src={group.photos[0].url}
-                    alt={group.photos[0].title}
-                    fill
-                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                    className="object-cover"
-                  />
+            <button
+              type="button"
+              onClick={() => setLightboxIndex(i)}
+              className="group block w-full overflow-hidden rounded-sm border border-navy/10 bg-white text-left transition-shadow duration-300 hover:shadow-xl"
+            >
+              <div className="relative">
+                {group.pairs.length > 0 ? (
+                  <BeforeAfter before={group.pairs[0].before} after={group.pairs[0].after} />
+                ) : group.photos[0] ? (
+                  <div className="relative aspect-[4/3] w-full">
+                    <Image
+                      src={group.photos[0].url}
+                      alt={group.photos[0].title}
+                      fill
+                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+                ) : null}
+
+                <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-navy-deep/0 opacity-0 transition-all duration-300 group-hover:bg-navy-deep/30 group-hover:opacity-100">
+                  <span className="rounded-full border border-ivory/70 px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-ivory">
+                    Agrandir
+                  </span>
                 </div>
-              ) : null}
+              </div>
 
               {group.photos.length > (group.pairs.length > 0 ? 0 : 1) && (
                 <div className="grid grid-cols-4 gap-0.5">
@@ -84,10 +98,19 @@ export default function RealisationsGrid({ groups }: { groups: ProjectGroup[] })
                   <p className="mt-1 text-sm leading-relaxed text-navy-mist">{group.description}</p>
                 )}
               </div>
-            </article>
+            </button>
           </Reveal>
         ))}
       </div>
+
+      {lightboxIndex !== null && (
+        <Lightbox
+          groups={filtered}
+          index={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+          onNavigate={setLightboxIndex}
+        />
+      )}
     </div>
   );
 }

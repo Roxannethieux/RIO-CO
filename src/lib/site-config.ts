@@ -107,8 +107,10 @@ export const specialties = [
 
 export const realisationCategories = [
   { value: "plomberie", label: "Plomberie" },
-  { value: "salle-de-bain", label: "Salle de bain" },
   { value: "cuisine", label: "Cuisine" },
+  { value: "salle-de-bain", label: "Salle de bain" },
+  { value: "chambre", label: "Chambre" },
+  { value: "salon-sejour", label: "Salon / Séjour" },
   { value: "renovation-complete", label: "Rénovation complète" },
   { value: "exterieur", label: "Extérieur" },
   { value: "autre", label: "Autre" },
