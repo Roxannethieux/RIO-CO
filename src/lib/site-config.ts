@@ -92,8 +92,8 @@ export const specialties = [
     title: "Second œuvre",
     highlight: false,
     description:
-      "Cloisons, électricité, menuiserie, peinture : toutes les compétences pour finaliser votre projet avec exigence.",
-    items: ["Électricité", "Placo & cloisons", "Menuiserie", "Peinture & revêtements"],
+      "Cloisons, menuiserie, peinture : toutes les compétences pour finaliser votre projet avec exigence.",
+    items: ["Placo & cloisons", "Menuiserie", "Peinture & revêtements", "Finitions"],
   },
   {
     slug: "carrelage-sols",

@@ -64,6 +64,15 @@ export default function Specialties() {
             </Reveal>
           ))}
         </div>
+
+        <Reveal delay={specialties.length * 0.08}>
+          <p className="mt-10 rounded-sm border border-navy/10 bg-white px-6 py-5 text-sm leading-relaxed text-navy-mist">
+            <span className="font-semibold text-navy">Un réseau de confiance : </span>
+            pour les travaux nécessitant une qualification spécifique (électricité, gaz…), je
+            fais appel à des professionnels partenaires qualifiés, avec le même niveau
+            d&apos;exigence sur chaque chantier.
+          </p>
+        </Reveal>
       </Container>
     </section>
   );
