@@ -27,28 +27,28 @@ export default function Header() {
           <Logo variant="light" />
         </Link>
 
-        <nav className="hidden items-center gap-9 lg:flex">
+        <nav className="hidden items-center gap-8 xl:flex">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium uppercase tracking-[0.12em] text-ivory/85 transition-colors hover:text-gold"
+              className="whitespace-nowrap text-sm font-medium uppercase tracking-[0.12em] text-ivory/85 transition-colors hover:text-gold"
             >
               {link.label}
             </Link>
           ))}
         </nav>
 
-        <div className="hidden items-center gap-5 lg:flex">
+        <div className="hidden items-center gap-5 xl:flex">
           <a
             href={siteConfig.phoneHref}
-            className="text-sm font-semibold tracking-wide text-ivory/90 hover:text-gold"
+            className="whitespace-nowrap text-sm font-semibold tracking-wide text-ivory/90 hover:text-gold"
           >
             {siteConfig.phone}
           </a>
           <Link
             href="/contact"
-            className="inline-flex items-center rounded-sm border border-gold px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-gold transition-colors hover:bg-gold hover:text-navy-deep"
+            className="inline-flex items-center whitespace-nowrap rounded-sm border border-gold px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-gold transition-colors hover:bg-gold hover:text-navy-deep"
           >
             Demander un devis
           </Link>
@@ -56,7 +56,7 @@ export default function Header() {
 
         <button
           type="button"
-          className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 lg:hidden"
+          className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 xl:hidden"
           aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
@@ -72,7 +72,7 @@ export default function Header() {
       </div>
 
       {open && (
-        <div className="border-t border-gold/20 bg-navy px-6 pb-8 pt-2 lg:hidden">
+        <div className="border-t border-gold/20 bg-navy px-6 pb-8 pt-2 xl:hidden">
           <nav className="flex flex-col gap-1">
             {navLinks.map((link) => (
               <Link

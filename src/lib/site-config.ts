@@ -55,11 +55,14 @@ export const siteConfig = {
   },
 } as const;
 
+// Libellés courts pour la navigation (header/footer) — volontairement plus
+// concis que les titres de page complets (H1, <title>), pour rester lisibles
+// sur une seule ligne dans la barre de navigation.
 export const navLinks = [
   { href: "/", label: "Votre projet" },
-  { href: "/specialites", label: "Mes spécialités" },
-  { href: "/realisations", label: "Découvrez mon travail" },
-  { href: "/contact", label: "Prenons rendez-vous" },
+  { href: "/specialites", label: "Spécialités" },
+  { href: "/realisations", label: "Mon travail" },
+  { href: "/contact", label: "Rendez-vous" },
 ] as const;
 
 export const specialties = [
