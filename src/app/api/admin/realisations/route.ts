@@ -5,6 +5,19 @@ import { realisationCategories } from "@/lib/site-config";
 const MAX_FILE_SIZE = 8 * 1024 * 1024; // 8 Mo
 const VALID_ROLES: PhotoRole[] = ["avant", "apres", "photo"];
 
+/**
+ * Le SDK Cloudinary rejette parfois avec un objet simple ({ message, http_code })
+ * plutôt qu'une vraie instance d'Error — sans ce repli, le message précis de
+ * l'erreur (ex. "Invalid cloud_name") était perdu au profit d'un texte générique.
+ */
+function extractErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  if (typeof error === "object" && error !== null && "message" in error) {
+    return String((error as { message: unknown }).message);
+  }
+  return "Échec de l'envoi de l'image.";
+}
+
 export async function POST(request: Request) {
   const formData = await request.formData();
   const file = formData.get("file");
@@ -52,7 +65,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true, publicId: result.public_id });
   } catch (error) {
     console.error("[admin/realisations] Échec upload", error);
-    const message = error instanceof Error ? error.message : "Échec de l'envoi de l'image.";
-    return NextResponse.json({ error: message }, { status: 500 });
+    return NextResponse.json({ error: extractErrorMessage(error) }, { status: 500 });
   }
 }
