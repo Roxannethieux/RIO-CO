@@ -47,6 +47,21 @@ function parseRole(value: string | undefined): PhotoRole {
   return value === "avant" || value === "apres" ? value : "photo";
 }
 
+type ContextShape = {
+  custom?: Record<string, string>;
+  [key: string]: unknown;
+};
+
+// L'API Search de Cloudinary ne renvoie pas toujours le contexte imbriqué
+// sous "custom" comme l'API Upload/Admin (parfois les champs sont à plat
+// directement sous "context") : on lit donc les deux formes possibles.
+function readContext(context: ContextShape | undefined, key: string): string | undefined {
+  if (!context) return undefined;
+  const flat = context[key];
+  if (typeof flat === "string") return flat;
+  return context.custom?.[key];
+}
+
 export async function listRealisations(): Promise<Realisation[]> {
   configure();
   if (!isCloudinaryConfigured()) return [];
@@ -66,9 +81,7 @@ export async function listRealisations(): Promise<Realisation[]> {
         secure_url: string;
         width: number;
         height: number;
-        context?: {
-          custom?: { title?: string; description?: string; project?: string; role?: string };
-        };
+        context?: ContextShape;
         tags?: string[];
         created_at: string;
       }) => ({
@@ -76,11 +89,11 @@ export async function listRealisations(): Promise<Realisation[]> {
         url: r.secure_url,
         width: r.width,
         height: r.height,
-        title: r.context?.custom?.title ?? "Réalisation",
-        description: r.context?.custom?.description ?? "",
+        title: readContext(r.context, "title") ?? "Réalisation",
+        description: readContext(r.context, "description") ?? "",
         category: parseCategory(r.tags),
-        project: r.context?.custom?.project ?? "",
-        role: parseRole(r.context?.custom?.role),
+        project: readContext(r.context, "project") ?? "",
+        role: parseRole(readContext(r.context, "role")),
         createdAt: r.created_at,
       })
     );
