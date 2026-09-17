@@ -10,6 +10,7 @@ export const dynamic = "force-dynamic";
 export default async function AdminDashboard() {
   const configured = isCloudinaryConfigured();
   const items = configured ? await listRealisations() : [];
+  const existingProjects = Array.from(new Set(items.map((i) => i.project).filter(Boolean)));
 
   return (
     <div className="min-h-screen bg-ivory-dim">
@@ -43,9 +44,7 @@ export default async function AdminDashboard() {
         )}
 
         <div className="mt-10 grid gap-10 lg:grid-cols-[380px_1fr]">
-          <AdminUploadForm
-            existingProjects={Array.from(new Set(items.map((i) => i.project).filter(Boolean)))}
-          />
+          <AdminUploadForm existingProjects={existingProjects} />
 
           <div>
             <div className="mb-4 flex items-center justify-between">
@@ -61,7 +60,11 @@ export default async function AdminDashboard() {
             ) : (
               <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
                 {items.map((item) => (
-                  <AdminRealisationCard key={item.publicId} item={item} />
+                  <AdminRealisationCard
+                    key={item.publicId}
+                    item={item}
+                    existingProjects={existingProjects}
+                  />
                 ))}
               </div>
             )}

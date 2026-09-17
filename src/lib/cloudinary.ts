@@ -133,6 +133,33 @@ export async function uploadRealisation(params: {
   return result;
 }
 
+export async function updateRealisation(
+  publicId: string,
+  params: {
+    title: string;
+    description: string;
+    category: string;
+    project: string;
+    role: PhotoRole;
+  }
+) {
+  configure();
+  if (!isCloudinaryConfigured()) {
+    throw new Error("Cloudinary n'est pas configuré.");
+  }
+
+  await cloudinary.uploader.explicit(publicId, {
+    type: "upload",
+    tags: ["rio-co", params.category],
+    context: {
+      title: params.title,
+      description: params.description,
+      project: params.project,
+      role: params.role,
+    },
+  });
+}
+
 export async function deleteRealisation(publicId: string) {
   configure();
   if (!isCloudinaryConfigured()) {
