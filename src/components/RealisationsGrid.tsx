@@ -77,7 +77,25 @@ export default function RealisationsGrid({ groups }: { groups: ProjectGroup[] })
                     />
                     <RoleBadge role={group.photos[0].role} side="left" />
                   </div>
+                ) : group.video ? (
+                  <div className="relative aspect-[4/3] w-full bg-navy-deep">
+                    <video
+                      src={group.video.url}
+                      muted
+                      playsInline
+                      preload="metadata"
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
                 ) : null}
+
+                {group.video && (group.pairs.length > 0 || group.photos.length > 0) && (
+                  <span className="pointer-events-none absolute bottom-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-navy-deep/85 text-gold">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden>
+                      <path d="M2 1.5 L10 6 L2 10.5 Z" />
+                    </svg>
+                  </span>
+                )}
 
                 <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-navy-deep/0 opacity-0 transition-all duration-300 group-hover:bg-navy-deep/30 group-hover:opacity-100">
                   <span className="rounded-full border border-ivory/70 px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-ivory">

@@ -93,14 +93,20 @@ export default function Lightbox({
 function LightboxContent({ group }: { group: ProjectGroup }) {
   const [activeExtra, setActiveExtra] = useState<number | null>(null);
   const hasPair = group.pairs.length > 0;
-  const showingExtra = activeExtra !== null && group.photos[activeExtra];
+  const hasOtherMedia = hasPair || group.photos.length > 0;
+  const [showVideo, setShowVideo] = useState(!hasOtherMedia && Boolean(group.video));
+  const showingExtra = !showVideo && activeExtra !== null && group.photos[activeExtra];
 
   return (
     <div
       className="max-h-full w-full max-w-3xl overflow-y-auto rounded-sm bg-navy"
       onClick={(e) => e.stopPropagation()}
     >
-      {showingExtra ? (
+      {showVideo && group.video ? (
+        <div className="aspect-[4/3] w-full bg-navy-deep">
+          <video src={group.video.url} controls playsInline className="h-full w-full" />
+        </div>
+      ) : showingExtra ? (
         <div className="relative aspect-[4/3] w-full bg-navy-deep">
           <Image
             src={group.photos[activeExtra as number].url}
@@ -128,14 +134,17 @@ function LightboxContent({ group }: { group: ProjectGroup }) {
         </div>
       ) : null}
 
-      {group.photos.length > (hasPair ? 0 : 1) && (
+      {(group.photos.length > (hasPair ? 0 : 1) || (group.video && hasOtherMedia)) && (
         <div className="flex gap-2 overflow-x-auto p-4">
           {hasPair && (
             <button
               type="button"
-              onClick={() => setActiveExtra(null)}
+              onClick={() => {
+                setShowVideo(false);
+                setActiveExtra(null);
+              }}
               className={`relative h-16 w-20 shrink-0 overflow-hidden rounded-sm border-2 ${
-                activeExtra === null ? "border-gold" : "border-transparent"
+                !showVideo && activeExtra === null ? "border-gold" : "border-transparent"
               }`}
             >
               <Image
@@ -151,15 +160,35 @@ function LightboxContent({ group }: { group: ProjectGroup }) {
             <button
               key={p.publicId}
               type="button"
-              onClick={() => setActiveExtra(i)}
+              onClick={() => {
+                setShowVideo(false);
+                setActiveExtra(i);
+              }}
               className={`relative h-16 w-20 shrink-0 overflow-hidden rounded-sm border-2 ${
-                activeExtra === i ? "border-gold" : "border-transparent"
+                !showVideo && activeExtra === i ? "border-gold" : "border-transparent"
               }`}
             >
               <Image src={p.url} alt={p.title} fill sizes="80px" className="object-cover" />
               <RoleBadge role={p.role} side="left" size="sm" />
             </button>
           ))}
+          {group.video && hasOtherMedia && (
+            <button
+              type="button"
+              onClick={() => setShowVideo(true)}
+              aria-label="Voir la vidéo"
+              className={`relative flex h-16 w-20 shrink-0 items-center justify-center overflow-hidden rounded-sm border-2 bg-navy-deep ${
+                showVideo ? "border-gold" : "border-transparent"
+              }`}
+            >
+              <video src={group.video.url} muted playsInline preload="metadata" className="h-full w-full object-cover" />
+              <span className="absolute inset-0 flex items-center justify-center bg-navy-deep/40">
+                <svg width="16" height="16" viewBox="0 0 12 12" fill="#B8935A" aria-hidden>
+                  <path d="M2 1.5 L10 6 L2 10.5 Z" />
+                </svg>
+              </span>
+            </button>
+          )}
         </div>
       )}
 

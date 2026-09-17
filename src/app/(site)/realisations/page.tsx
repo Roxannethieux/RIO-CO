@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { listRealisations } from "@/lib/cloudinary";
-import { groupByProject } from "@/lib/realisations";
+import { listRealisations, listRealisationVideos } from "@/lib/cloudinary";
+import { attachVideos, groupByProject } from "@/lib/realisations";
 import { Container, SectionHeading } from "@/components/ui";
 import RealisationsGrid from "@/components/RealisationsGrid";
 
@@ -13,7 +13,8 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function RealisationsPage() {
-  const groups = groupByProject(await listRealisations());
+  const [photos, videos] = await Promise.all([listRealisations(), listRealisationVideos()]);
+  const groups = attachVideos(groupByProject(photos), videos);
 
   return (
     <div className="bg-ivory">

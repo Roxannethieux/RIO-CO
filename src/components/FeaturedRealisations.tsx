@@ -1,11 +1,12 @@
 import Link from "next/link";
-import { listRealisations } from "@/lib/cloudinary";
-import { groupByProject } from "@/lib/realisations";
+import { listRealisations, listRealisationVideos } from "@/lib/cloudinary";
+import { attachVideos, groupByProject } from "@/lib/realisations";
 import { Container, SectionHeading } from "./ui";
 import RealisationsGrid from "./RealisationsGrid";
 
 export default async function FeaturedRealisations() {
-  const allGroups = groupByProject(await listRealisations());
+  const [photos, videos] = await Promise.all([listRealisations(), listRealisationVideos()]);
+  const allGroups = attachVideos(groupByProject(photos), videos);
   const groups = allGroups.slice(0, 6);
 
   return (

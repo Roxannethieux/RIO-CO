@@ -1,4 +1,4 @@
-import type { Realisation } from "./cloudinary";
+import type { Realisation, RealisationVideo } from "./cloudinary";
 
 export type ProjectGroup = {
   key: string;
@@ -7,6 +7,7 @@ export type ProjectGroup = {
   description: string;
   pairs: { before: Realisation; after: Realisation }[];
   photos: Realisation[];
+  video?: RealisationVideo;
   createdAt: string;
 };
 
@@ -87,4 +88,42 @@ export function groupByProject(items: Realisation[]): ProjectGroup[] {
       };
     })
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+}
+
+/**
+ * Associe à chaque fiche la vidéo du même chantier/pièce (même clé
+ * projet::catégorie que pour les photos). Une vidéo sans photo
+ * correspondante forme sa propre fiche plutôt que d'être perdue.
+ */
+export function attachVideos(groups: ProjectGroup[], videos: RealisationVideo[]): ProjectGroup[] {
+  const result = groups.map((g) => ({ ...g }));
+  const indexByKey = new Map(result.map((g, i) => [g.key, i]));
+
+  for (const video of videos) {
+    const project = video.project.trim();
+    const key = project ? `${project}::${video.category}` : `single-video-${video.publicId}`;
+    const existingIndex = indexByKey.get(key);
+
+    if (existingIndex !== undefined) {
+      result[existingIndex].video = video;
+      if (!result[existingIndex].description) {
+        result[existingIndex].description = video.description;
+      }
+    } else {
+      const group: ProjectGroup = {
+        key,
+        projectName: project || video.title,
+        category: video.category,
+        description: video.description,
+        pairs: [],
+        photos: [],
+        video,
+        createdAt: video.createdAt,
+      };
+      indexByKey.set(key, result.length);
+      result.push(group);
+    }
+  }
+
+  return result.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 }

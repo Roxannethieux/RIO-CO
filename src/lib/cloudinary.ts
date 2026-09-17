@@ -1,6 +1,8 @@
 import { v2 as cloudinary } from "cloudinary";
 
 const FOLDER = "rio-co/realisations";
+const VIDEO_FOLDER = "rio-co/realisations-videos";
+const VIDEO_TAG = "rio-co-video";
 
 let configured = false;
 
@@ -41,6 +43,10 @@ export type Realisation = {
 
 function parseCategory(tags: string[] | undefined) {
   return (tags ?? []).find((t) => t !== "rio-co") ?? "autre";
+}
+
+function parseVideoCategory(tags: string[] | undefined) {
+  return (tags ?? []).find((t) => t !== VIDEO_TAG) ?? "autre";
 }
 
 function parseRole(value: string | undefined): PhotoRole {
@@ -166,4 +172,124 @@ export async function deleteRealisation(publicId: string) {
     throw new Error("Cloudinary n'est pas configuré.");
   }
   await cloudinary.uploader.destroy(publicId);
+}
+
+export type RealisationVideo = {
+  publicId: string;
+  url: string;
+  title: string;
+  description: string;
+  category: string;
+  project: string;
+  createdAt: string;
+};
+
+export async function listRealisationVideos(): Promise<RealisationVideo[]> {
+  configure();
+  if (!isCloudinaryConfigured()) return [];
+
+  try {
+    const result = await cloudinary.search
+      .expression(`folder:${VIDEO_FOLDER} AND resource_type:video`)
+      .with_field("context")
+      .with_field("tags")
+      .sort_by("created_at", "desc")
+      .max_results(200)
+      .execute();
+
+    return (result.resources ?? []).map(
+      (r: {
+        public_id: string;
+        secure_url: string;
+        context?: ContextShape;
+        tags?: string[];
+        created_at: string;
+      }) => ({
+        publicId: r.public_id,
+        url: r.secure_url,
+        title: readContext(r.context, "title") ?? "Réalisation",
+        description: readContext(r.context, "description") ?? "",
+        category: parseVideoCategory(r.tags),
+        project: readContext(r.context, "project") ?? "",
+        createdAt: r.created_at,
+      })
+    );
+  } catch (error) {
+    console.error("[cloudinary] Échec de récupération des vidéos", error);
+    return [];
+  }
+}
+
+// Retire les caractères qui casseraient l'encodage "clé=valeur|clé2=valeur2"
+// du contexte Cloudinary lors de la signature manuelle (upload direct
+// navigateur → Cloudinary, sans repasser par notre serveur pour les grosses
+// vidéos).
+function sanitizeForContext(value: string): string {
+  return value.replace(/[|=]/g, " ").trim();
+}
+
+export function signVideoUpload(params: {
+  title: string;
+  description: string;
+  category: string;
+  project: string;
+}) {
+  configure();
+  if (!isCloudinaryConfigured()) {
+    throw new Error("Cloudinary n'est pas configuré.");
+  }
+
+  const timestamp = Math.round(Date.now() / 1000);
+  const tags = [VIDEO_TAG, params.category].join(",");
+  const context = [
+    `title=${sanitizeForContext(params.title)}`,
+    `description=${sanitizeForContext(params.description)}`,
+    `project=${sanitizeForContext(params.project)}`,
+    `category=${sanitizeForContext(params.category)}`,
+  ].join("|");
+
+  const signature = cloudinary.utils.api_sign_request(
+    { timestamp, folder: VIDEO_FOLDER, tags, context },
+    process.env.CLOUDINARY_API_SECRET!
+  );
+
+  return {
+    signature,
+    timestamp,
+    apiKey: process.env.CLOUDINARY_API_KEY!,
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME!,
+    folder: VIDEO_FOLDER,
+    tags,
+    context,
+  };
+}
+
+export async function updateRealisationVideo(
+  publicId: string,
+  params: { title: string; description: string; category: string; project: string }
+) {
+  configure();
+  if (!isCloudinaryConfigured()) {
+    throw new Error("Cloudinary n'est pas configuré.");
+  }
+
+  await cloudinary.uploader.explicit(publicId, {
+    resource_type: "video",
+    type: "upload",
+    tags: [VIDEO_TAG, params.category],
+    context: {
+      title: params.title,
+      description: params.description,
+      project: params.project,
+      category: params.category,
+    },
+  });
+}
+
+export async function deleteRealisationVideo(publicId: string) {
+  configure();
+  if (!isCloudinaryConfigured()) {
+    throw new Error("Cloudinary n'est pas configuré.");
+  }
+  await cloudinary.uploader.destroy(publicId, { resource_type: "video" });
 }
