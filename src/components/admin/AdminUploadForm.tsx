@@ -4,7 +4,11 @@ import { useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { realisationCategories } from "@/lib/site-config";
 
-export default function AdminUploadForm() {
+export default function AdminUploadForm({
+  existingProjects = [],
+}: {
+  existingProjects?: string[];
+}) {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
   const [loading, setLoading] = useState(false);
@@ -75,12 +79,21 @@ export default function AdminUploadForm() {
           name="project"
           type="text"
           required
+          list="existing-projects"
           placeholder="Ex. Rénovation salle de bain — Vincennes"
           className="w-full rounded-sm border border-navy/15 bg-ivory px-4 py-2.5 text-sm"
         />
+        {existingProjects.length > 0 && (
+          <datalist id="existing-projects">
+            {existingProjects.map((p) => (
+              <option key={p} value={p} />
+            ))}
+          </datalist>
+        )}
         <p className="mt-1 text-xs text-navy-mist">
-          Utilisez le même nom de projet pour toutes les photos d&apos;un même chantier — elles
-          seront regroupées ensemble sur le site.
+          Utilisez exactement le même nom de projet pour toutes les photos d&apos;un même
+          chantier (choisissez-le dans la liste si le chantier existe déjà) — elles seront
+          regroupées ensemble sur le site, par pièce.
         </p>
       </div>
 

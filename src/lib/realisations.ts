@@ -11,16 +11,22 @@ export type ProjectGroup = {
 };
 
 /**
- * Regroupe les photos par chantier (champ "project" renseigné en back-office).
- * Une photo sans projet renseigné forme son propre groupe (repli sur son titre).
- * Les photos "avant" et "après" d'un même projet sont appariées par ordre d'ajout ;
- * les photos excédentaires rejoignent la liste des photos complémentaires du projet.
+ * Regroupe les photos par chantier (champ "project") ET par pièce (champ
+ * "category") : un même chantier peut couvrir plusieurs pièces (ex. "Chantier
+ * X" avec une chambre et une cuisine rénovées), chacune formant sa propre
+ * fiche avec son propre appariement avant/après — sans quoi l'avant d'une
+ * pièce pourrait se retrouver apparié à l'après d'une autre pièce du même
+ * chantier.
+ *
+ * Une photo sans projet renseigné forme son propre groupe (repli sur son
+ * titre). Les photos "avant" et "après" d'une même fiche sont appariées par
+ * ordre d'ajout ; les photos excédentaires rejoignent les photos
+ * complémentaires de la fiche.
  */
 export function groupByProject(items: Realisation[]): ProjectGroup[] {
   type Draft = {
     projectName: string;
     category: string;
-    description: string;
     avant: Realisation[];
     apres: Realisation[];
     photos: Realisation[];
@@ -30,13 +36,13 @@ export function groupByProject(items: Realisation[]): ProjectGroup[] {
   const map = new Map<string, Draft>();
 
   for (const item of items) {
-    const key = item.project.trim() || `single-${item.publicId}`;
+    const project = item.project.trim();
+    const key = project ? `${project}::${item.category}` : `single-${item.publicId}`;
     let group = map.get(key);
     if (!group) {
       group = {
-        projectName: item.project.trim() || item.title,
+        projectName: project || item.title,
         category: item.category,
-        description: item.description,
         avant: [],
         apres: [],
         photos: [],
@@ -62,13 +68,21 @@ export function groupByProject(items: Realisation[]): ProjectGroup[] {
         after: g.apres[i],
       }));
       const leftovers = [...g.avant.slice(pairCount), ...g.apres.slice(pairCount)];
+      const photos = [...leftovers, ...g.photos];
+
+      // Description affichée sous la photo : on privilégie le texte de la
+      // photo "après" (le résultat des travaux), puis "avant", puis la
+      // première photo complémentaire disponible.
+      const description =
+        pairs[0]?.after.description || pairs[0]?.before.description || photos[0]?.description || "";
+
       return {
         key,
         projectName: g.projectName,
         category: g.category,
-        description: g.description,
+        description,
         pairs,
-        photos: [...leftovers, ...g.photos],
+        photos,
         createdAt: g.createdAt,
       };
     })

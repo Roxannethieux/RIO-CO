@@ -7,6 +7,7 @@ import { realisationCategories } from "@/lib/site-config";
 import Reveal from "./Reveal";
 import BeforeAfter from "./BeforeAfter";
 import Lightbox from "./Lightbox";
+import RoleBadge from "./RoleBadge";
 
 export default function RealisationsGrid({ groups }: { groups: ProjectGroup[] }) {
   const [filter, setFilter] = useState<string>("all");
@@ -37,15 +38,20 @@ export default function RealisationsGrid({ groups }: { groups: ProjectGroup[] })
   return (
     <div>
       {availableCategories.length > 1 && (
-        <div className="mb-10 flex flex-wrap gap-2">
-          <FilterPill active={filter === "all"} onClick={() => setFilter("all")}>
-            Tout voir
-          </FilterPill>
-          {availableCategories.map((c) => (
-            <FilterPill key={c.value} active={filter === c.value} onClick={() => setFilter(c.value)}>
-              {c.label}
+        <div className="mb-10">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-navy-mist">
+            Trier par pièce
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <FilterPill active={filter === "all"} onClick={() => setFilter("all")}>
+              Tout voir
             </FilterPill>
-          ))}
+            {availableCategories.map((c) => (
+              <FilterPill key={c.value} active={filter === c.value} onClick={() => setFilter(c.value)}>
+                {c.label}
+              </FilterPill>
+            ))}
+          </div>
         </div>
       )}
 
@@ -69,6 +75,7 @@ export default function RealisationsGrid({ groups }: { groups: ProjectGroup[] })
                       sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
+                    <RoleBadge role={group.photos[0].role} side="left" />
                   </div>
                 ) : null}
 
@@ -84,6 +91,7 @@ export default function RealisationsGrid({ groups }: { groups: ProjectGroup[] })
                   {group.photos.slice(group.pairs.length > 0 ? 0 : 1, group.pairs.length > 0 ? 4 : 5).map((p) => (
                     <div key={p.publicId} className="relative aspect-square">
                       <Image src={p.url} alt={p.title} fill sizes="120px" className="object-cover" />
+                      <RoleBadge role={p.role} side="left" size="sm" />
                     </div>
                   ))}
                 </div>

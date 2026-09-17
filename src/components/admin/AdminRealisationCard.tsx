@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import type { Realisation } from "@/lib/cloudinary";
 import { realisationCategories } from "@/lib/site-config";
+import RoleBadge from "@/components/RoleBadge";
 
 export default function AdminRealisationCard({ item }: { item: Realisation }) {
   const router = useRouter();
@@ -30,17 +31,13 @@ export default function AdminRealisationCard({ item }: { item: Realisation }) {
     <div className="overflow-hidden rounded-sm border border-navy/10 bg-white">
       <div className="relative aspect-[4/3] w-full">
         <Image src={item.url} alt={item.title} fill sizes="300px" className="object-cover" />
+        <RoleBadge role={item.role} side="left" />
       </div>
       <div className="p-4">
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-[10px] font-semibold uppercase tracking-wide text-gold-dark">
             {realisationCategories.find((c) => c.value === item.category)?.label}
           </span>
-          {item.role !== "photo" && (
-            <span className="rounded-full border border-navy/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-navy-mist">
-              {item.role === "avant" ? "Avant" : "Après"}
-            </span>
-          )}
         </div>
         {item.project && (
           <p className="mt-1.5 truncate text-xs font-semibold uppercase tracking-wide text-navy/60">

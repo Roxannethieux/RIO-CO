@@ -5,6 +5,7 @@ import Image from "next/image";
 import type { ProjectGroup } from "@/lib/realisations";
 import { realisationCategories } from "@/lib/site-config";
 import BeforeAfterSlider from "./BeforeAfterSlider";
+import RoleBadge from "./RoleBadge";
 
 export default function Lightbox({
   groups,
@@ -109,6 +110,7 @@ function LightboxContent({ group }: { group: ProjectGroup }) {
             className="object-contain"
             priority
           />
+          <RoleBadge role={group.photos[activeExtra as number].role} side="left" />
         </div>
       ) : hasPair ? (
         <BeforeAfterSlider before={group.pairs[0].before} after={group.pairs[0].after} priority />
@@ -122,6 +124,7 @@ function LightboxContent({ group }: { group: ProjectGroup }) {
             className="object-contain"
             priority
           />
+          <RoleBadge role={group.photos[0].role} side="left" />
         </div>
       ) : null}
 
@@ -154,6 +157,7 @@ function LightboxContent({ group }: { group: ProjectGroup }) {
               }`}
             >
               <Image src={p.url} alt={p.title} fill sizes="80px" className="object-cover" />
+              <RoleBadge role={p.role} side="left" size="sm" />
             </button>
           ))}
         </div>

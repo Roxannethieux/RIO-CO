@@ -3,6 +3,7 @@
 import { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import type { Realisation } from "@/lib/cloudinary";
+import RoleBadge from "./RoleBadge";
 
 export default function BeforeAfterSlider({
   before,
@@ -72,12 +73,8 @@ export default function BeforeAfterSlider({
         />
       </div>
 
-      <span className="pointer-events-none absolute left-2 top-2 rounded-sm bg-navy-deep/85 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-gold">
-        Avant
-      </span>
-      <span className="pointer-events-none absolute right-2 top-2 rounded-sm bg-navy-deep/85 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-gold">
-        Après
-      </span>
+      <RoleBadge role="avant" side="left" />
+      <RoleBadge role="apres" side="right" />
 
       {/* Ligne + poignée de glissement */}
       <div

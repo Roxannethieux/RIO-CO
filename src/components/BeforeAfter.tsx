@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { Realisation } from "@/lib/cloudinary";
+import RoleBadge from "./RoleBadge";
 
 export default function BeforeAfter({
   before,
@@ -18,9 +19,7 @@ export default function BeforeAfter({
           sizes="(min-width: 1024px) 16vw, 25vw"
           className="object-cover"
         />
-        <span className="absolute left-2 top-2 rounded-sm bg-navy-deep/85 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-gold">
-          Avant
-        </span>
+        <RoleBadge role="avant" side="left" />
       </div>
       <div className="relative w-1/2 border-l border-ivory/40">
         <Image
@@ -30,9 +29,7 @@ export default function BeforeAfter({
           sizes="(min-width: 1024px) 16vw, 25vw"
           className="object-cover"
         />
-        <span className="absolute right-2 top-2 rounded-sm bg-navy-deep/85 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-gold">
-          Après
-        </span>
+        <RoleBadge role="apres" side="right" />
       </div>
     </div>
   );

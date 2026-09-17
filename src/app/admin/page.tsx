@@ -43,7 +43,9 @@ export default async function AdminDashboard() {
         )}
 
         <div className="mt-10 grid gap-10 lg:grid-cols-[380px_1fr]">
-          <AdminUploadForm />
+          <AdminUploadForm
+            existingProjects={Array.from(new Set(items.map((i) => i.project).filter(Boolean)))}
+          />
 
           <div>
             <div className="mb-4 flex items-center justify-between">
