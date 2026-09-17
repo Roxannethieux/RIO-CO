@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { uploadRealisation, type PhotoRole } from "@/lib/cloudinary";
 import { realisationCategories } from "@/lib/site-config";
 import { extractErrorMessage } from "@/lib/errors";
@@ -49,6 +50,9 @@ export async function POST(request: Request) {
       project,
       role: roleRaw as PhotoRole,
     });
+
+    revalidatePath("/");
+    revalidatePath("/realisations");
 
     return NextResponse.json({ ok: true, publicId: result.public_id });
   } catch (error) {

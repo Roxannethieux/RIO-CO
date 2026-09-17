@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { deleteRealisation, updateRealisation, type PhotoRole } from "@/lib/cloudinary";
 import { realisationCategories } from "@/lib/site-config";
 import { extractErrorMessage } from "@/lib/errors";
@@ -24,6 +25,10 @@ export async function DELETE(
 
   try {
     await deleteRealisation(publicId);
+
+    revalidatePath("/");
+    revalidatePath("/realisations");
+
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("[admin/realisations] Échec suppression", error);
@@ -74,6 +79,10 @@ export async function PATCH(
       project,
       role: roleRaw as PhotoRole,
     });
+
+    revalidatePath("/");
+    revalidatePath("/realisations");
+
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("[admin/realisations] Échec modification", error);
