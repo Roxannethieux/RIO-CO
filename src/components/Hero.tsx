@@ -71,14 +71,14 @@ export default function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.5 }}
-          className="mt-20 grid max-w-2xl grid-cols-3 gap-6 border-t border-gold/20 pt-8"
+          className="mt-20 grid max-w-2xl grid-cols-3 gap-6 border-t border-gold/20 pt-8 sm:flex sm:flex-wrap sm:justify-between sm:gap-x-8 sm:gap-y-6"
         >
           {[
             ["Interlocuteur", "unique, du début à la fin"],
             ["Devis", "gratuit & détaillé"],
             ["Garantie", "décennale"],
           ].map(([label, value]) => (
-            <div key={label}>
+            <div key={label} className="shrink-0">
               <div className="font-serif text-xl text-ivory sm:text-2xl">{label}</div>
               <div className="mt-1 text-xs uppercase tracking-wide text-ivory/55 sm:text-sm">
                 {value}
